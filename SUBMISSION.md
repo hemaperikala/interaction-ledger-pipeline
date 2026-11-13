@@ -88,8 +88,8 @@ linked through the `call_id` of the call's other events. Calls are grouped in Py
 - Not tested: concurrent ingest, disk-full/kill -9 at arbitrary points (relies on SQLite transactions).
 
 ## Results
-Large dataset (`--scale large`, seed 42: ~144k lead rows, ~633k event lines), measured in the Linux sandbox where I developed it (not re-run on my laptop):
-- ingest drop_1: 16.1s, drop_2: 21.4s (total **~38s**), report: **~7s**; re-ingest: 0.1s. DB ~264 MB.
+Large dataset (`--scale large`, seed 42: ~144k lead rows, ~633k event lines), measured on my Windows laptop:
+- ingest drop_1: 34.3s, drop_2: 51.8s (total **~86s**), report: **~7.9s**; re-ingest: 0.8s. DB ~252 MB.
 - Small seed 42: 2,057 lead rows, 108 rejected, 57 merged duplicates, 8,745 events, 8 malformed, 237 duplicates, 462 orphans, 18 unknown dispositions.
 - Surprises: ~5% of lead rows are rejected; many orphans are legitimate (calls to numbers never uploaded, or to rows that were rejected).
 
@@ -98,5 +98,6 @@ Large dataset (`--scale large`, seed 42: ~144k lead rows, ~633k event lines), me
 2. Move aggregation into SQL (window functions for latest-per-call) and benchmark against the Python grouping.
 3. Reversible field encryption (AES-GCM, key from a KMS) if names must ever be read back; key rotation.
 4. Production at 100k leads/day: object-store landing zone → scheduled job (hourly) that ingests new files only (the `ingested_files` ledger is already the idempotency token); Postgres instead of SQLite; alert on rejection-rate or orphan-rate spikes; quarantine tables for malformed lines instead of counts; backfills = re-run `report` (derived), or replay files into a fresh DB; failed files retried independently because each file is atomic.
+
 
 

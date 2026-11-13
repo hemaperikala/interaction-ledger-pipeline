@@ -1,4 +1,4 @@
-# AI Usage Disclosure
+﻿# AI Usage Disclosure
 
 ## Tools used
 Claude (Anthropic) in the claude.ai chat.
@@ -18,10 +18,9 @@ Claude (Anthropic) in the claude.ai chat.
 ## Where the AI was wrong or unhelpful
 - One of the AI's own tests asserted the wrong number of non-empty event lines (6 instead of 7, a miscount in the test, not the pipeline). The test failed on the first run and was corrected after counting the lines by hand.
 - The AI's first suggested plan called for a separate `orphan_events` table; the final design derives orphans at report time instead, because that is what makes late-arriving leads work without a back-fill step.
-- The large-scale timings in `SUBMISSION.md` come from the AI's Linux sandbox, not from my laptop, so they may differ on other hardware.
 
 ## How I verified AI-generated code
 - 82 automated tests, including a differential test against an independent in-memory reference implementation, on two generated seeds.
 - Idempotency checks: drop_1 → drop_2, 1 → 2 → 1, and all-at-once give byte-identical reports.
 - Scanned the database file for plaintext phone numbers and names.
-- Ran the pipeline and the tests myself on Windows (PowerShell) and confirmed the output and the re-ingest behaviour.
+- Ran the pipeline and the tests myself on Windows (PowerShell), on seeds 42 and 7 and from a fresh clone of the repo, and re-ran the large-scale benchmark on my own laptop.
