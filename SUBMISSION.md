@@ -3,7 +3,7 @@
 ## Candidate
 - **Name:** Hemalatha Perikala
 - **Assignment chosen:** A (Data)
-- **Time spent (honest estimate):** 4 hours
+- **Time spent (honest estimate):** 6 hours
 
 ## How to run
 ```bash
@@ -98,4 +98,5 @@ Large dataset (`--scale large`, seed 42: ~144k lead rows, ~633k event lines), me
 2. Move aggregation into SQL (window functions for latest-per-call) and benchmark against the Python grouping.
 3. Reversible field encryption (AES-GCM, key from a KMS) if names must ever be read back; key rotation.
 4. Production at 100k leads/day: object-store landing zone → scheduled job (hourly) that ingests new files only (the `ingested_files` ledger is already the idempotency token); Postgres instead of SQLite; alert on rejection-rate or orphan-rate spikes; quarantine tables for malformed lines instead of counts; backfills = re-run `report` (derived), or replay files into a fresh DB; failed files retried independently because each file is atomic.
+
 
